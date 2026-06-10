@@ -6,7 +6,7 @@
   "document": {
     "schemaVersion": 1,
     "meta": {
-      "name": "Example Panel Demo",
+      "name": "Flexible Layouts Example",
       "author": "jaysuk"
     },
     "theme": { "enabled": false, "colors": {} },
@@ -19,29 +19,41 @@
         "grid": { "cols": 12, "rowHeight": 30 },
         "items": [
           {
-            "i": "ex-plugin",
+            "i": "ex-page",
             "x": 0, "y": 0, "w": 6, "h": 10,
-            "title": "Example Panel",
+            "title": "Example Page (plugin)",
             "widget": {
               "type": "pluginPage",
               "source": "page",
-              "path": "/Plugins/ExamplePanel",
-              "pluginId": "ExamplePanel",
+              "path": "/Plugins/FlexLayoutsExample",
+              "pluginId": "FlexLayoutsExample",
+              "label": "Example Page"
+            }
+          },
+          {
+            "i": "ex-panel",
+            "x": 6, "y": 0, "w": 3, "h": 5,
+            "title": "Example Panel (plugin)",
+            "widget": {
+              "type": "pluginPage",
+              "source": "page",
+              "path": "/Plugins/FlexLayoutsExample/Panel",
+              "pluginId": "FlexLayoutsExample",
               "label": "Example Panel"
             }
           },
           {
             "i": "ex-note",
-            "x": 6, "y": 0, "w": 6, "h": 6,
+            "x": 9, "y": 0, "w": 3, "h": 5,
             "title": "About this layout",
             "widget": {
               "type": "note",
-              "content": "# Example Panel Demo\n\nThis layout embeds the **Example Panel** plugin (left) using a *Plugin page* widget, alongside a couple of built-in widgets.\n\nIt is the reference example for:\n\n- building a **custom panel** as a separate DWC plugin, and\n- testing Flexible Layouts' **dependency-aware import** — if you imported this without the Example Panel plugin installed, you'll have seen the missing-plugin warning."
+              "content": "# Flexible Layouts Example\n\nThis layout embeds **both** halves of the *Flexible Layouts Example* plugin:\n\n- the full **page** (left), and\n- the compact **panel** (middle),\n\neach via a *Plugin page* widget. It's also the test case for **dependency-aware import** — without the plugin installed you'll have seen the missing-plugin warning."
             }
           },
           {
             "i": "ex-clock",
-            "x": 6, "y": 6, "w": 6, "h": 2,
+            "x": 6, "y": 5, "w": 6, "h": 2,
             "widget": { "type": "clock", "label": "Time", "source": "time" }
           }
         ]
@@ -50,9 +62,9 @@
     "nav": { "order": ["/Plugins/FlexibleLayouts/p/example-panel-demo"], "hidden": [] },
     "dependencies": [
       {
-        "pluginId": "ExamplePanel",
-        "name": "Example Panel",
-        "reason": "Embedded as a Plugin page widget on the Example Demo page"
+        "pluginId": "FlexLayoutsExample",
+        "name": "Flexible Layouts Example",
+        "reason": "Embeds the plugin's example page and panel on the Example Demo page"
       }
     ]
   }
