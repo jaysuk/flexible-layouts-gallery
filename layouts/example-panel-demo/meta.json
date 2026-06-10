@@ -1,0 +1,9 @@
+{
+  "title": "Example Panel Demo",
+  "author": "jaysuk",
+  "description": "Reference layout that embeds the Example Panel plugin and demonstrates Flexible Layouts' dependency-aware import. A good starting point for contributing your own layout.",
+  "machine": "any",
+  "tags": ["example", "plugin", "starter"],
+  "file": "layout.dwclayout.json",
+  "preview": "preview.svg"
+}

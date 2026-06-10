@@ -1,0 +1,59 @@
+{
+  "kind": "dwclayout",
+  "app": "FlexibleLayouts",
+  "fileVersion": 1,
+  "exportedAt": "2026-06-10T00:00:00.000Z",
+  "document": {
+    "schemaVersion": 1,
+    "meta": {
+      "name": "Example Panel Demo",
+      "author": "jaysuk"
+    },
+    "theme": { "enabled": false, "colors": {} },
+    "pages": {
+      "/Plugins/FlexibleLayouts/p/example-panel-demo": {
+        "kind": "custom",
+        "title": "Example Demo",
+        "icon": "mdi-puzzle-outline",
+        "category": "control",
+        "grid": { "cols": 12, "rowHeight": 30 },
+        "items": [
+          {
+            "i": "ex-plugin",
+            "x": 0, "y": 0, "w": 6, "h": 10,
+            "title": "Example Panel",
+            "widget": {
+              "type": "pluginPage",
+              "source": "page",
+              "path": "/Plugins/ExamplePanel",
+              "pluginId": "ExamplePanel",
+              "label": "Example Panel"
+            }
+          },
+          {
+            "i": "ex-note",
+            "x": 6, "y": 0, "w": 6, "h": 6,
+            "title": "About this layout",
+            "widget": {
+              "type": "note",
+              "content": "# Example Panel Demo\n\nThis layout embeds the **Example Panel** plugin (left) using a *Plugin page* widget, alongside a couple of built-in widgets.\n\nIt is the reference example for:\n\n- building a **custom panel** as a separate DWC plugin, and\n- testing Flexible Layouts' **dependency-aware import** — if you imported this without the Example Panel plugin installed, you'll have seen the missing-plugin warning."
+            }
+          },
+          {
+            "i": "ex-clock",
+            "x": 6, "y": 6, "w": 6, "h": 2,
+            "widget": { "type": "clock", "label": "Time", "source": "time" }
+          }
+        ]
+      }
+    },
+    "nav": { "order": ["/Plugins/FlexibleLayouts/p/example-panel-demo"], "hidden": [] },
+    "dependencies": [
+      {
+        "pluginId": "ExamplePanel",
+        "name": "Example Panel",
+        "reason": "Embedded as a Plugin page widget on the Example Demo page"
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "flexible-layouts-gallery",
+  "version": "1.0.0",
+  "description": "Community gallery of shareable Flexible Layouts for DuetWebControl.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "index": "node scripts/build-index.mjs",
+    "dev": "npm run index && vite",
+    "build": "npm run index && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0",
+    "vue": "^3.5.30",
+    "vue-tsc": "^2.1.10"
+  }
+}
