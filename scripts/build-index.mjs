@@ -9,11 +9,33 @@
  *
  * Contributors only touch `layouts/` - this runs automatically in `npm run build` (and in CI).
  */
+import { execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+/**
+ * First/last commit dates touching a layout folder = created/updated. Needs full git history (the
+ * deploy workflow checks out with fetch-depth: 0); returns nulls on a shallow clone / outside git.
+ */
+function gitDates(slug) {
+	const rel = `layouts/${slug}`;
+	const log = (args) => {
+		try {
+			return execFileSync("git", ["log", ...args, "--format=%cI", "--", rel], { cwd: root, encoding: "utf8" }).trim();
+		} catch {
+			return "";
+		}
+	};
+	const created = log(["--reverse"]).split("\n").filter(Boolean)[0] || null;
+	const updated = log(["-1"]) || null;
+	return { created, updated };
+}
+
+/** Image files in a folder usable as screenshots (the dedicated preview is listed first). */
+const IMAGE_RE = /\.(png|jpe?g|webp|gif|svg)$/i;
 const layoutsDir = join(root, "layouts");
 const publicDir = join(root, "public");
 const outDir = join(publicDir, "layouts");
@@ -107,23 +129,50 @@ for (const slug of slugs) {
 	mkdirSync(pub, { recursive: true });
 	cpSync(metaPath, join(pub, "meta.json"));
 	cpSync(layoutPath, join(pub, meta.file));
-	const hasPreview = meta.preview && existsSync(join(dir, meta.preview));
-	if (hasPreview) cpSync(join(dir, meta.preview), join(pub, meta.preview));
+
+	// Screenshots for the expanded view: the explicit `screenshots` list if given, plus any other
+	// image files in the folder. The dedicated `preview` (if any) is kept first as the card thumbnail.
+	const url = (name) => `layouts/${slug}/${name}`;
+	const listed = Array.isArray(meta.screenshots) ? meta.screenshots : [];
+	const discovered = readdirSync(dir).filter((f) => IMAGE_RE.test(f));
+	const ordered = [...new Set([...(meta.preview ? [meta.preview] : []), ...listed, ...discovered])]
+		.filter((name) => existsSync(join(dir, name)));
+	for (const name of ordered) cpSync(join(dir, name), join(pub, name));
+	const screenshots = ordered.map(url);
+	const preview = meta.preview && existsSync(join(dir, meta.preview)) ? url(meta.preview) : (screenshots[0] ?? null);
+
+	// Long-form details: a referenced/auto-detected markdown file wins, else an inline string.
+	let details = "";
+	const detailsFile = (meta.details && existsSync(join(dir, meta.details))) ? meta.details
+		: (existsSync(join(dir, "details.md")) ? "details.md" : null);
+	if (detailsFile) {
+		details = readFileSync(join(dir, detailsFile), "utf8");
+		cpSync(join(dir, detailsFile), join(pub, detailsFile));
+	} else if (typeof meta.details === "string") {
+		details = meta.details;
+	}
+
+	const { created, updated } = gitDates(slug);
 
 	entries.push({
 		slug,
 		title: meta.title,
 		author: meta.author,
 		description: meta.description,
+		details,
 		machine: meta.machine || "any",
 		tags: Array.isArray(meta.tags) ? meta.tags : [],
 		kind: file.kind,
 		kindLabel: KINDS[file.kind],
 		file: `layouts/${slug}/${meta.file}`,
-		preview: hasPreview ? `layouts/${slug}/${meta.preview}` : null,
+		preview,
+		screenshots,
 		widgetCount: countWidgets(doc),
 		pageCount: Object.keys(doc?.pages ?? {}).length,
 		requiredPlugins: requiredPlugins(file, doc),
+		version: typeof meta.version === "string" ? meta.version : null,
+		created,
+		updated,
 	});
 }
 

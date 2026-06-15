@@ -2,8 +2,10 @@
   "title": "Flexible Layouts Example",
   "author": "jaysuk",
   "description": "Reference layout embedding both the page and the compact panel from the Flexible Layouts Example plugin, and demonstrating dependency-aware import. A good starting point for contributing your own layout.",
+  "details": "details.md",
   "machine": "any",
   "tags": ["example", "plugin", "starter"],
   "file": "layout.dwclayout.json",
-  "preview": "preview.svg"
+  "preview": "preview.svg",
+  "version": "1.0"
 }

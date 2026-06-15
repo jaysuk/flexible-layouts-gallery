@@ -22,13 +22,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # full history so build-index can derive each layout's created/updated dates
+      - uses: actions/setup-node@v6
         with:
           node-version: 24 # current LTS; Node 20 reached end-of-life (Apr 2026)
       - run: npm install
       - run: npm run build # runs scripts/build-index.mjs (validates every contribution) then vite build
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -42,4 +44,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
