@@ -37,6 +37,19 @@ npm run build && npm run preview
 The site uses a **relative base** (`vite.config.ts`), so it works at any Pages path without
 hard-coding the repository name.
 
+### Google Analytics (optional)
+
+The build injects the GA4 `gtag.js` snippet only when a Measurement ID is provided, so local builds
+and contributor forks stay analytics-free. To enable it on the deployed site:
+
+1. Create a **GA4** property and copy its Measurement ID (`G-XXXXXXXXXX`).
+2. **Settings → Secrets and variables → Actions → Variables → New repository variable**, named
+   `GA_MEASUREMENT_ID`, set to that ID.
+3. Re-run the deploy workflow (or push to `main`). The deploy step passes it as `VITE_GA_ID`, which
+   `vite.config.ts` bakes into `index.html` at build time.
+
+To run locally with analytics, set the env var yourself: `VITE_GA_ID=G-XXXXXXXXXX npm run build`.
+
 ## License
 
 Site code: MIT. Contributed layouts remain the property of their authors.

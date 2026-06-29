@@ -30,6 +30,10 @@ jobs:
           node-version: 24 # current LTS; Node 20 reached end-of-life (Apr 2026)
       - run: npm install
       - run: npm run build # runs scripts/build-index.mjs (validates every contribution) then vite build
+        env:
+          # Google Analytics Measurement ID. Set it under Settings → Secrets and variables → Actions →
+          # Variables as GA_MEASUREMENT_ID. When empty (e.g. forks), vite.config injects no analytics.
+          VITE_GA_ID: ${{ vars.GA_MEASUREMENT_ID }}
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
